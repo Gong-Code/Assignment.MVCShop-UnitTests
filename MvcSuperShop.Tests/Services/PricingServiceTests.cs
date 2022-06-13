@@ -74,36 +74,60 @@ namespace MvcSuperShop.Tests.Services
         }
 
         [TestMethod]
-        public void When_several_agreement_is_found_product_discount_is_used()
+        public void When_several_agreements_use_biggest_discount()
         {
             // ARRANGE
             var productList = new List<ProductServiceModel>
             {
-                new ProductServiceModel { BasePrice = 530000}
+                new ProductServiceModel
+                {
+                    BasePrice = 1000,
+                    Name = "Impala Hybrid",
+                    CategoryName = "Volvo"
+
+                }
+
             };
 
             var customerContext = new CurrentCustomerContext
             {
                 Agreements = new List<Agreement>
                 {
-                    new Agreement()
-                    {
+                     new Agreement()
+                     {
                         AgreementRows = new List<AgreementRow>
                         {
                             new AgreementRow()
                             {
+                                CategoryMatch = "volvo",
                                 PercentageDiscount = 10
                             },
                             new AgreementRow()
                             {
-                                PercentageDiscount = 6
-                            },new AgreementRow()
-                            {
-                                PercentageDiscount = 3
-                            }
-                        }
-                    }
+                                ProductMatch = "hybrid",
+                                PercentageDiscount = 4
+                            },
 
+                        }
+                     },
+
+                     new Agreement()
+                     {
+                        AgreementRows = new List<AgreementRow>
+                        {
+                            new AgreementRow()
+                            {
+                                PercentageDiscount = 6,
+                                CategoryMatch = "van"
+                            },
+                            new AgreementRow()
+                            {
+                                PercentageDiscount = 5,
+                                ProductMatch = "hybrid"
+                            }
+
+                        }
+                     }
                 }
             };
 
@@ -111,9 +135,9 @@ namespace MvcSuperShop.Tests.Services
             var result = sut.CalculatePrices(productList, customerContext);
 
             // ASSERT
-            Assert.AreEqual(477000, result.First().Price);
+            Assert.AreEqual(900, result.First().Price);
         }
     }
-      
+
 }
 

@@ -72,6 +72,7 @@ namespace MvcSuperShop.Tests.Controllers
                 new Category()
             });
 
+            //När Map anropas med en Lista av CategoryViewModel och vill ha ut en lista med Categories ska du returnera en lista med CategoryViewModel
             mapperMock.Setup(m => m.Map<List<CategoryViewModel>>(It.IsAny<List<Category>>()))
             .Returns(new List<CategoryViewModel>
             {
@@ -104,7 +105,6 @@ namespace MvcSuperShop.Tests.Controllers
             {
                 User = user
             };
-
 
             // ACT
             var result = sut.Index() as ViewResult;

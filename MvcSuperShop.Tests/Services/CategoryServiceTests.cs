@@ -29,7 +29,7 @@ namespace MvcSuperShop.Tests.Services
         [TestMethod]
         public void Get_trending_categories_should_be_listed()
         {
-            // ARRANGE
+            // ARRANGE dasdasdsadsadas
             var categories = new List<Category>
             {
                 new Category

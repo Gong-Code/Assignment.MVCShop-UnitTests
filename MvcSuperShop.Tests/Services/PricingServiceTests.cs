@@ -40,29 +40,41 @@ namespace MvcSuperShop.Tests.Services
         }
 
         [TestMethod]
-        public void When_agreement_is_found_product_discount_is_used()
+        public void When_single_category_are_matched_use_only_the_biggest_discount()
         {
             // ARRANGE
             var productList = new List<ProductServiceModel>
             {
-                new ProductServiceModel { BasePrice = 530000}
+                new ProductServiceModel
+                {
+                    BasePrice = 1000,
+                    Name = "Challenger",
+                    CategoryName = "Mini van"
+
+                }
+
             };
 
-            var customerContext = new CurrentCustomerContext
+            var customerContext = new CurrentCustomerContext()
             {
                 Agreements = new List<Agreement>
                 {
-                    new Agreement()
+                    new Agreement
                     {
                         AgreementRows = new List<AgreementRow>
                         {
-                            new AgreementRow()
+                            new AgreementRow
                             {
-                                PercentageDiscount = 6
+                                PercentageDiscount = 5,
+                                ProductMatch = "hybrid"
+                            },
+                            new AgreementRow
+                            {
+                                PercentageDiscount = 6,
+                                CategoryMatch = "van"
                             }
                         }
                     }
-
                 }
             };
 
@@ -70,8 +82,56 @@ namespace MvcSuperShop.Tests.Services
             var result = sut.CalculatePrices(productList, customerContext);
 
             // ASSERT
-            Assert.AreEqual(498200, result.First().Price);
+            Assert.AreEqual(940, result.First().Price);
         }
+
+        [TestMethod]
+        public void When_two_discount_are_triggered_use_biggest_discount()
+        {
+            // ARRANGE
+            var productList = new List<ProductServiceModel>
+            {
+                new ProductServiceModel
+                {
+                    BasePrice = 1000,
+                    Name = "XTS Hybrid",
+                    CategoryName = "Mini Van"
+
+                }
+
+            };
+
+            var customerContext = new CurrentCustomerContext()
+            {
+                Agreements = new List<Agreement>
+                {
+                    new Agreement
+                    {
+                        AgreementRows = new List<AgreementRow>
+                        {
+                            new AgreementRow
+                            {
+                                PercentageDiscount = 5,
+                                ProductMatch = "hybrid"
+                            },
+                            new AgreementRow
+                            {
+                                PercentageDiscount = 6,
+                                CategoryMatch = "van"
+                            }
+                        }
+                    }
+                }
+            };
+
+            // ACT
+            var result = sut.CalculatePrices(productList, customerContext);
+
+            // ASSERT
+            Assert.AreEqual(940, result.First().Price);
+        }
+
+        
 
         [TestMethod]
         public void When_several_agreements_use_biggest_discount()

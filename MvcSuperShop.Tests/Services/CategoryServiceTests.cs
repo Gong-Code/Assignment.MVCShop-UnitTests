@@ -27,7 +27,7 @@ namespace MvcSuperShop.Tests.Services
         }
 
         [TestMethod]
-        public void Get_trending_categories_should_be_listed()
+        public void When_in_Index_get_trending_categories_should_be_displayed()
         {
             // ARRANGE dasdasdsadsadas
             var categories = new List<Category>

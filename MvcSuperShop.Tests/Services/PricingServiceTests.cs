@@ -2,6 +2,7 @@
 using MvcSuperShop.Data;
 using MvcSuperShop.Infrastructure.Context;
 using MvcSuperShop.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,6 +17,55 @@ namespace MvcSuperShop.Tests.Services
         public void Initialize()
         {
             sut = new PricingService();
+        }
+
+        [TestMethod]
+        public void When_agreement_is_not_valid_use_BasePrice()
+        {
+            // ARRANGE
+            var productList = new List<ProductServiceModel>
+            {
+                new ProductServiceModel
+                {
+                    BasePrice = 1000,
+                    Name = "Challenger",
+                    CategoryName = "Mini van"
+
+                }
+
+            };
+
+            var customerContext = new CurrentCustomerContext()
+            {
+                Agreements = new List<Agreement>
+                {
+                    new Agreement
+                    {
+                        ValidFrom = new DateTime(2019, 01, 02),
+                        ValidTo = new DateTime(2020, 04, 06),
+                        AgreementRows = new List<AgreementRow>
+                        {
+                            
+                            new AgreementRow
+                            {
+                                PercentageDiscount = 5,
+                                ProductMatch = "hybrid"
+                            },
+                            new AgreementRow
+                            {
+                                PercentageDiscount = 6,
+                                CategoryMatch = "van"
+                            }
+                        }
+                    }
+                }
+            };
+
+            // ACT
+            var result = sut.CalculatePrices(productList, customerContext);
+
+            // ASSERT
+            Assert.AreEqual(1000, result.First().Price);
         }
 
         [TestMethod]
@@ -40,7 +90,7 @@ namespace MvcSuperShop.Tests.Services
         }
 
         [TestMethod]
-        public void When_single_category_are_matched_use_only_the_biggest_discount()
+        public void When_single_category_are_matched_use_only_the_that_discount()
         {
             // ARRANGE
             var productList = new List<ProductServiceModel>
@@ -61,6 +111,8 @@ namespace MvcSuperShop.Tests.Services
                 {
                     new Agreement
                     {
+                        ValidTo = new DateTime(2032, 06, 01),
+
                         AgreementRows = new List<AgreementRow>
                         {
                             new AgreementRow
@@ -107,6 +159,8 @@ namespace MvcSuperShop.Tests.Services
                 {
                     new Agreement
                     {
+                        ValidTo = new DateTime(2032, 06, 01),
+
                         AgreementRows = new List<AgreementRow>
                         {
                             new AgreementRow
@@ -155,6 +209,8 @@ namespace MvcSuperShop.Tests.Services
                 {
                      new Agreement()
                      {
+                        ValidTo = new DateTime(2032, 06, 01),
+
                         AgreementRows = new List<AgreementRow>
                         {
                             new AgreementRow()

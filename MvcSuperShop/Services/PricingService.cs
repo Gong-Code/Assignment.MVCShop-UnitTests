@@ -13,20 +13,25 @@ public class PricingService : IPricingService
         foreach (var product in products)
         {
             var lowest = product.BasePrice;
+
             if (customerContext != null)
             {
                 foreach (var agreement in customerContext.Agreements)
                 {
-                    foreach (var agreementRow in agreement.AgreementRows)
+                    if (agreement.ValidTo > DateTime.Now)
                     {
-                        if (AgreementMatches(agreementRow, product))
+                        foreach (var agreementRow in agreement.AgreementRows)
                         {
-                            var price = (1.0m - (agreementRow.PercentageDiscount / 100.0m)) * product.BasePrice;
-                            if (price < lowest)
-                                lowest = Convert.ToInt32(Math.Round(price, 0));
-                        }
+                            if (AgreementMatches(agreementRow, product))
+                            {
+                                var price = (1.0m - (agreementRow.PercentageDiscount / 100.0m)) * product.BasePrice;
+                                if (price < lowest)
+                                    lowest = Convert.ToInt32(Math.Round(price, 0));
+                            }
 
+                        }
                     }
+                    
                 }
             }
             product.Price = lowest;

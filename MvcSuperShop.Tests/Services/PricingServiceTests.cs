@@ -228,6 +228,8 @@ namespace MvcSuperShop.Tests.Services
 
                      new Agreement()
                      {
+                        ValidTo = new DateTime(2032, 06, 01),
+
                         AgreementRows = new List<AgreementRow>
                         {
                             new AgreementRow()

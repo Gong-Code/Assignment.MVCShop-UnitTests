@@ -43,6 +43,7 @@ namespace MvcSuperShop.Tests.Services
                     {
                         ValidFrom = new DateTime(2019, 01, 02),
                         ValidTo = new DateTime(2020, 04, 06),
+
                         AgreementRows = new List<AgreementRow>
                         {
                             
@@ -90,7 +91,7 @@ namespace MvcSuperShop.Tests.Services
         }
 
         [TestMethod]
-        public void When_single_category_are_matched_use_only_the_that_discount()
+        public void When_single_category_are_matched_use_only_biggest_discount()
         {
             // ARRANGE
             var productList = new List<ProductServiceModel>
@@ -146,7 +147,7 @@ namespace MvcSuperShop.Tests.Services
                 new ProductServiceModel
                 {
                     BasePrice = 1000,
-                    Name = "XTS Hybrid",
+                    Name = "Coupe",
                     CategoryName = "Mini Van"
 
                 }
@@ -185,8 +186,6 @@ namespace MvcSuperShop.Tests.Services
             Assert.AreEqual(940, result.First().Price);
         }
 
-        
-
         [TestMethod]
         public void When_several_agreements_use_biggest_discount()
         {
@@ -196,7 +195,7 @@ namespace MvcSuperShop.Tests.Services
                 new ProductServiceModel
                 {
                     BasePrice = 1000,
-                    Name = "Impala Hybrid",
+                    Name = "XC60 Hybrid",
                     CategoryName = "Volvo"
 
                 }

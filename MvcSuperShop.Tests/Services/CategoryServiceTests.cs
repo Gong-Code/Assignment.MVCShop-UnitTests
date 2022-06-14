@@ -27,25 +27,25 @@ namespace MvcSuperShop.Tests.Services
         }
 
         [TestMethod]
-        public void When_in_Index_get_trending_categories_should_be_displayed()
+        public void At_in_Index_get_trending_categories_should_be_displayed()
         {
             // ARRANGE 
             var categories = new List<Category>
             {
                 new Category
                 {
-                    Name = "sdasdas",
-                    Icon = "dasd",
+                    Name = "TrendONE",
+                    Icon = "carOne",
                 },
                 new Category
                 {
-                    Name = "gfsdg",
-                    Icon = "gdfg",
+                    Name = "TrendTwo",
+                    Icon = "careTwo",
                 },
                 new Category
                 {
-                    Name = "uyutio",
-                    Icon = "ghjhk",
+                    Name = "TrendThree",
+                    Icon = "carThree",
                 }
             };
 

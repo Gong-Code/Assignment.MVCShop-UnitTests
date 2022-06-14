@@ -84,10 +84,10 @@ namespace MvcSuperShop.Tests.Services
             };
 
             // ACT
-            var products = sut.CalculatePrices(productList, customerContext);
+            var result = sut.CalculatePrices(productList, customerContext);
 
             // ASSERT
-            Assert.AreEqual(987654, products.First().Price);
+            Assert.AreEqual(987654, result.First().Price);
         }
 
         [TestMethod]

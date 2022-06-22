@@ -53,18 +53,7 @@ namespace MvcSuperShop.Tests.Controllers
         public void Index_should_show_3_categories()
         {
             // ARRANGE
-            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Email, "gunnar@somecompany.com")
-                //other required and custom claims
-            }, "TestAuthentication"));
-
-            sut.ControllerContext = new ControllerContext();
-            sut.ControllerContext.HttpContext = new DefaultHttpContext()
-            {
-                User = user
-            };
+            sut.ControllerContext = SetupControllerContext();
 
             categoryServiceMock.Setup(e => e.GetTrendingCategories(3))
             .Returns(fixture.CreateMany<Category>(3).ToList());          

@@ -44,6 +44,7 @@ public class PricingService : IPricingService
         var productCheck = !string.IsNullOrEmpty(agreementRow.ProductMatch);
         var categoryCheck = !string.IsNullOrEmpty(agreementRow.CategoryMatch);
         var manufacturerCheck = !string.IsNullOrEmpty(agreementRow.ManufacturerMatch);
+
         if (productCheck && !product.Name.ToLower().Contains(agreementRow.ProductMatch.ToLower()))
             return false;
         if (categoryCheck && !product.CategoryName.ToLower().Contains(agreementRow.CategoryMatch.ToLower()))

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoFixture;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcSuperShop.Data;
 using MvcSuperShop.Services;
@@ -8,7 +9,7 @@ using System.Linq;
 namespace MvcSuperShop.Tests.Services
 {
     [TestClass]
-    public class CategoryServiceTests
+    public class CategoryServiceTests : BaseTest
     {      
         private ApplicationDbContext context;
         private CategoryService sut;
@@ -30,25 +31,8 @@ namespace MvcSuperShop.Tests.Services
         public void At_in_Index_get_trending_categories_should_be_displayed()
         {
             // ARRANGE 
-            var categories = new List<Category>
-            {
-                new Category
-                {
-                    Name = "TrendONE",
-                    Icon = "carOne",
-                },
-                new Category
-                {
-                    Name = "TrendTwo",
-                    Icon = "careTwo",
-                },
-                new Category
-                {
-                    Name = "TrendThree",
-                    Icon = "carThree",
-                }
-            };
-
+            var categories = fixture.CreateMany<Category>(3).ToList();
+           
             context.Categories.AddRange(categories);
             context.SaveChanges();
 

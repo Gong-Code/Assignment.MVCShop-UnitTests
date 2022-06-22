@@ -70,7 +70,7 @@ namespace MvcSuperShop.Tests.Services
         }
 
         [TestMethod]
-        public void When_no_agreement_exists_product_baseprice_is_used()
+        public void If_no_agreements_exists_use_basePrice()
         {
             // ARRANGE
             var productList = new List<ProductServiceModel>
@@ -147,8 +147,8 @@ namespace MvcSuperShop.Tests.Services
                 new ProductServiceModel
                 {
                     BasePrice = 1000,
-                    Name = "Coupe",
-                    CategoryName = "Mini Van"
+                    Name = "Hybrid Van",
+                    CategoryName = "Van"
 
                 }
 

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AutoFixture;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,8 +19,9 @@ using System.Threading.Tasks;
 
 namespace MvcSuperShop.Tests.Controllers
 {
+
     [TestClass]
-    public class HomeControllerTests
+    public class HomeControllerTests : BaseControllerTests
     {
         private HomeController sut;
         private Mock<ICategoryService> categoryServiceMock;
@@ -65,22 +67,11 @@ namespace MvcSuperShop.Tests.Controllers
             };
 
             categoryServiceMock.Setup(e => e.GetTrendingCategories(3))
-            .Returns(new List<Category>
-            {
-                new Category(),
-                new Category(),
-                new Category()
-            });
+            .Returns(fixture.CreateMany<Category>(3).ToList());          
 
-            //När Map anropas med en Lista av CategoryViewModel och vill ha ut en lista med Categories ska du returnera en lista med CategoryViewModel
             mapperMock.Setup(m => m.Map<List<CategoryViewModel>>(It.IsAny<List<Category>>()))
-            .Returns(new List<CategoryViewModel>
-            {
-                new CategoryViewModel(),
-                new CategoryViewModel(),
-                new CategoryViewModel()
-            });
-           
+            .Returns(fixture.CreateMany<CategoryViewModel>(3).ToList());           
+
             // ACT
             var result = sut.Index() as ViewResult;
             var model = result.Model as HomeIndexViewModel;
@@ -92,19 +83,8 @@ namespace MvcSuperShop.Tests.Controllers
         [TestMethod]
         public void Index_should_return_correct_view()
         {
-            // ARRANGE
-            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Email, "gunnar@somecompany.com")
-                //other required and custom claims
-            }, "TestAuthentication"));
-
-            sut.ControllerContext = new ControllerContext();
-            sut.ControllerContext.HttpContext = new DefaultHttpContext()
-            {
-                User = user
-            };
+            //ARRANGE
+            sut.ControllerContext = SetupControllerContext();
 
             // ACT
             var result = sut.Index() as ViewResult;
@@ -117,54 +97,14 @@ namespace MvcSuperShop.Tests.Controllers
         public void Index_should_set_new_10_products()
         {
             // ARRANGE
-            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Email, "gunnar@somecompany.com")
-                //other required and custom claims
-            }, "TestAuthentication"));
+            sut.ControllerContext = SetupControllerContext();
 
-            sut.ControllerContext = new ControllerContext();
-            sut.ControllerContext.HttpContext = new DefaultHttpContext()
-            {
-                User = user
-            };
-
-            var customer = new CurrentCustomerContext
-            {
-                UserId = Guid.NewGuid(),
-                Email = "blablabla@gmail.com"
-            };
-
-            productServiceMock.Setup(p => p.GetNewProducts(10, customer)).Returns(new List<ProductServiceModel>
-            {
-                new ProductServiceModel(),
-                new ProductServiceModel(),
-                new ProductServiceModel(),
-                new ProductServiceModel(),
-                new ProductServiceModel(),
-                new ProductServiceModel(),
-                new ProductServiceModel(),
-                new ProductServiceModel(),
-                new ProductServiceModel(),
-                new ProductServiceModel()
-            });
+            productServiceMock.Setup(p => p.GetNewProducts(10,It.IsAny<CurrentCustomerContext>()))
+                .Returns(fixture.CreateMany<ProductServiceModel>(10).ToList());
 
             mapperMock.Setup(m => m.Map<List<ProductBoxViewModel>>(It.IsAny<IEnumerable<ProductServiceModel>>()))
-            .Returns(new List<ProductBoxViewModel>
-            {
-               new ProductBoxViewModel(),
-               new ProductBoxViewModel(),
-               new ProductBoxViewModel(),
-               new ProductBoxViewModel(),
-               new ProductBoxViewModel(),
-               new ProductBoxViewModel(),
-               new ProductBoxViewModel(),
-               new ProductBoxViewModel(),
-               new ProductBoxViewModel(),
-               new ProductBoxViewModel()
-            });
-
+            .Returns(fixture.CreateMany<ProductBoxViewModel>(10).ToList());
+           
             // ACT
             var result = sut.Index() as ViewResult;
 

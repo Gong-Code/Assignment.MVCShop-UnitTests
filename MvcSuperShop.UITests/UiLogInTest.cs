@@ -30,6 +30,7 @@ namespace MvcSuperShop.UITests
         [TestMethod]
         public void When_LogIn_return_IndexPage()
         {
+            //ARRANGE
             _driver.Navigate().GoToUrl("https://localhost:7122/");
 
             Wait(3);
@@ -42,6 +43,7 @@ namespace MvcSuperShop.UITests
 
             Wait(3);
 
+            //ACT
             var emailInput = _driver.FindElement(By.Id("Input_Email"));
             emailInput.SendKeys("stefan.holmberg@systementor.se");
 
@@ -54,6 +56,7 @@ namespace MvcSuperShop.UITests
 
             Wait(3);
 
+            //ASSERT
             Assert.AreEqual("https://localhost:7122/", _driver.Url);
 
         }

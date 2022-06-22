@@ -40,8 +40,7 @@ namespace MvcSuperShop.UITests
             
             Wait(3);
 
-            //ACT
-            
+            //ACT           
             var password = "Hejsan123!";
 
             var emailInput = _driver.FindElement(By.Id("Input_Email"));
